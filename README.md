@@ -19,30 +19,44 @@ A hybrid HUD system for visionOS that combines **ornaments** (floating UI) and *
   - Proximity-aware layouts (adapts based on distance)
 - Timeline-based updates (every 5 minutes)
 
-### 🔌 Data Sources
-Extensible architecture supporting multiple data source types:
+### 🔌 Plugin System
+**Dynamic plugin architecture** allowing external services to provide data:
+- **Plugin discovery**: Automatically discover available plugins from any server
+- **Multiple authentication methods**: API key, Bearer token, OAuth2 (planned)
+- **Flexible data formats**: Numbers, strings, integers, booleans, arrays
+- **Built-in plugin manager**: Add, configure, and manage plugins from the app
+- **Developer-friendly API**: Simple JSON API specification (v1.0)
+
+Built-in examples:
 - **Weather data** (example API integration)
 - **System metrics** (CPU, memory, etc.)
-- **Custom API endpoints** (easily configurable)
+- **Custom API endpoints** (via plugin specification)
 
 ## Project Structure
 
 ```
 hdsup/
-├── hdsup/                          # Main app
+├── hdsup/                              # Main app
 │   ├── Models/
-│   │   └── HUDDataSource.swift     # Data models and source protocols
+│   │   ├── HUDDataSource.swift         # Data models and source protocols
+│   │   └── PluginSpecification.swift   # Plugin API specification
 │   ├── Services/
-│   │   └── HUDDataService.swift    # Data fetching and management
+│   │   ├── HUDDataService.swift        # Data fetching and management
+│   │   └── PluginManager.swift         # Plugin discovery and loading
 │   ├── Views/
-│   │   └── Ornaments/
-│   │       └── HUDOrnamentView.swift  # Ornament UI components
-│   ├── AppModel.swift              # App-wide state management
-│   ├── ContentView.swift           # Main window with ornaments
-│   └── ImmersiveView.swift         # Immersive space integration
-└── HUDWidgetExtension/             # Widget extension
-    ├── HUDWidget.swift             # Widget implementation
-    └── HUDWidgetBundle.swift       # Widget bundle
+│   │   ├── Ornaments/
+│   │   │   └── HUDOrnamentView.swift   # Ornament UI components
+│   │   └── PluginManagementView.swift  # Plugin configuration UI
+│   ├── AppModel.swift                  # App-wide state management
+│   ├── ContentView.swift               # Main window with ornaments
+│   └── ImmersiveView.swift             # Immersive space integration
+├── HUDWidgetExtension/                 # Widget extension
+│   ├── HUDWidget.swift                 # Widget implementation
+│   └── HUDWidgetBundle.swift           # Widget bundle
+└── docs/                               # Documentation
+    ├── PLUGIN_API_SPECIFICATION.md     # Plugin API spec
+    ├── PLUGIN_EXAMPLES.md              # Implementation examples
+    └── DEVELOPER_GUIDE.md              # Complete developer guide
 ```
 
 ## Getting Started
@@ -69,23 +83,77 @@ open hdsup.xcodeproj
 
 ### Configuring Data Sources
 
-#### Adding a Custom API Data Source
+#### Using the Plugin System (Recommended)
 
-In `AppModel.swift` or your initialization code:
+1. **Open Plugin Manager** from the main window
+2. **Add Plugin** by entering a plugin server URL
+3. **Discover** available plugins automatically
+4. **Configure** authentication (API key, bearer token)
+5. **Enable/Disable** plugins as needed
 
-```swift
-let customSource = CustomAPIDataSource(
-    name: "Server Status",
-    iconName: "server.rack",
-    endpoint: "https://api.example.com/status"
-)
+Example plugin URL: `https://your-plugin-server.com`
 
-appModel.hudDataService.addDataSource(customSource)
+The app will:
+- Call `/plugins/discover` to find available plugins
+- Let you select which plugins to enable
+- Automatically fetch data from enabled plugins
+- Display data in ornaments and widgets
+
+#### For Plugin Developers
+
+**Build your own HUD plugins!** See the comprehensive documentation:
+
+- **[Plugin API Specification](docs/PLUGIN_API_SPECIFICATION.md)** - Complete API spec
+- **[Plugin Examples](docs/PLUGIN_EXAMPLES.md)** - Working examples in Node.js, Python, Go, PHP
+- **[Developer Guide](docs/DEVELOPER_GUIDE.md)** - Step-by-step implementation guide
+
+**Quick Start for Developers:**
+
+1. Implement two HTTP endpoints:
+   - `/plugins/discover` - Returns available plugins
+   - `/plugins/yourplugin` - Returns formatted data
+
+2. Deploy to any HTTPS server
+
+3. Users add your plugin URL in the app
+
+**Example minimal plugin (Node.js):**
+
+```javascript
+app.get('/plugins/discover', (req, res) => {
+  res.json({
+    apiVersion: "1.0.0",
+    plugins: [{
+      metadata: {
+        id: "com.example.myplugin",
+        name: "My Plugin",
+        version: "1.0.0",
+        // ... more metadata
+      },
+      endpoint: "/plugins/data"
+    }]
+  });
+});
+
+app.get('/plugins/data', (req, res) => {
+  res.json({
+    apiVersion: "1.0.0",
+    plugin: { /* metadata */ },
+    data: {
+      value: { number: 42 },
+      metrics: { unit: { string: "%" } },
+      collectedAt: new Date().toISOString()
+    },
+    timestamp: new Date().toISOString()
+  });
+});
 ```
 
-#### Creating a Custom Data Source
+See full examples in the [docs/](docs/) directory.
 
-Implement the `HUDDataSource` protocol:
+#### Legacy: Creating Custom Data Sources (Code-based)
+
+For simple use cases, you can implement the `HUDDataSource` protocol:
 
 ```swift
 struct MyCustomDataSource: HUDDataSource {
@@ -94,9 +162,7 @@ struct MyCustomDataSource: HUDDataSource {
     let iconName = "chart.bar"
     
     func fetchData() async throws -> HUDData {
-        // Fetch your data here
         let value = try await fetchFromAPI()
-        
         return HUDData(
             title: "My Metric",
             value: "\(value)",
@@ -105,6 +171,11 @@ struct MyCustomDataSource: HUDDataSource {
         )
     }
 }
+```
+
+Then add to `AppModel`:
+```swift
+appModel.hudDataService.addDataSource(MyCustomDataSource())
 ```
 
 ## Usage

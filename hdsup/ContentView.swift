@@ -11,6 +11,7 @@ import RealityKitContent
 
 struct ContentView: View {
     @Environment(AppModel.self) private var appModel
+    @State private var showingPluginManager = false
     
     var body: some View {
         VStack {
@@ -23,6 +24,14 @@ struct ContentView: View {
 
             ToggleImmersiveSpaceButton()
             
+            // Plugin Manager Button
+            Button {
+                showingPluginManager = true
+            } label: {
+                Label("Manage Plugins", systemImage: "puzzlepiece.extension.fill")
+            }
+            .buttonStyle(.borderedProminent)
+            
             // HUD Controls
             VStack(spacing: 12) {
                 Toggle("Top Ornament", isOn: Bindable(appModel).showTopOrnament)
@@ -33,6 +42,9 @@ struct ContentView: View {
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
         }
         .padding()
+        .sheet(isPresented: $showingPluginManager) {
+            PluginManagementView()
+        }
         // Top ornament - displays first data source
         .ornament(
             visibility: appModel.showTopOrnament ? .visible : .hidden,

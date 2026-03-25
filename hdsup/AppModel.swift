@@ -22,6 +22,9 @@ class AppModel {
     // HUD data service
     let hudDataService = HUDDataService()
     
+    // Plugin manager
+    let pluginManager = PluginManager()
+    
     // HUD display settings
     var showTopOrnament = true
     var showBottomOrnament = true

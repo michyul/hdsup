@@ -17,6 +17,9 @@
 		D0CC881E2F74AA70003C70D0 /* HUDWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDWidget.swift; sourceTree = "<group>"; };
 		D0CC881F2F74AA77003C70D0 /* HUDWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDWidgetBundle.swift; sourceTree = "<group>"; };
 		D0CC88202F74AAB0003C70D0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D0CC88292F74ACAE003C70D0 /* PLUGIN_API_SPECIFICATION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PLUGIN_API_SPECIFICATION.md; sourceTree = "<group>"; };
+		D0CC882A2F74ACD8003C70D0 /* PLUGIN_EXAMPLES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PLUGIN_EXAMPLES.md; sourceTree = "<group>"; };
+		D0CC882B2F74AD0F003C70D0 /* DEVELOPER_GUIDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DEVELOPER_GUIDE.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -60,6 +63,7 @@
 				D0CC87FA2F74A71C003C70D0 /* Products */,
 				D0CC881D2F74AA54003C70D0 /* HUDWidgetExtension */,
 				D0CC88202F74AAB0003C70D0 /* README.md */,
+				D0CC88282F74AC9C003C70D0 /* docs */,
 			);
 			sourceTree = "<group>";
 		};
@@ -86,6 +90,16 @@
 				D0CC881F2F74AA77003C70D0 /* HUDWidgetBundle.swift */,
 			);
 			path = HUDWidgetExtension;
+			sourceTree = "<group>";
+		};
+		D0CC88282F74AC9C003C70D0 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				D0CC88292F74ACAE003C70D0 /* PLUGIN_API_SPECIFICATION.md */,
+				D0CC882A2F74ACD8003C70D0 /* PLUGIN_EXAMPLES.md */,
+				D0CC882B2F74AD0F003C70D0 /* DEVELOPER_GUIDE.md */,
+			);
+			path = docs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
