@@ -18,4 +18,12 @@ class AppModel {
         case open
     }
     var immersiveSpaceState = ImmersiveSpaceState.closed
+    
+    // HUD data service
+    let hudDataService = HUDDataService()
+    
+    // HUD display settings
+    var showTopOrnament = true
+    var showBottomOrnament = true
+    var showSideOrnaments = false
 }
