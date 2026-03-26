@@ -25,8 +25,12 @@ class AppModel {
     // Plugin manager
     let pluginManager = PluginManager()
     
+    // Notification service
+    let notificationService = NotificationService()
+    
     // HUD display settings
     var showTopOrnament = true
     var showBottomOrnament = true
     var showSideOrnaments = false
+    var showNotifications = true
 }

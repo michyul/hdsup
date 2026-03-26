@@ -88,10 +88,49 @@ struct ContentView: View {
                 }
             }
         }
+        // Notification ornament - displays active notifications
+        .ornament(
+            visibility: appModel.showNotifications ? .visible : .hidden,
+            attachmentAnchor: .scene(.trailing)
+        ) {
+            VStack(spacing: 8) {
+                ForEach(appModel.notificationService.getActiveNotifications(for: .ornament)) { active in
+                    OrnamentNotificationView(
+                        active: active,
+                        onDismiss: {
+                            appModel.notificationService.dismissNotification(id: active.id)
+                        },
+                        onAction: { action in
+                            handleNotificationAction(action)
+                        }
+                    )
+                }
+            }
+        }
         .task {
             // Start auto-updating data when view appears
             await appModel.hudDataService.updateAllData()
             appModel.hudDataService.startAutoUpdate(interval: 30)
+            
+            // Start webhook server for notifications
+            appModel.notificationService.startWebhookServer()
+        }
+        .onDisappear {
+            appModel.notificationService.stopWebhookServer()
+        }
+    }
+    
+    private func handleNotificationAction(_ action: NotificationAction) {
+        switch action.type {
+        case .openURL:
+            if let urlString = action.url, let url = URL(string: urlString) {
+                // Open URL (would need to handle this properly in visionOS)
+                print("Opening URL: \(url)")
+            }
+        case .dismiss:
+            break
+        default:
+            print("Action: \(action.title)")
         }
     }
 }
