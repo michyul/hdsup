@@ -32,6 +32,28 @@ Built-in examples:
 - **System metrics** (CPU, memory, etc.)
 - **Custom API endpoints** (via plugin specification)
 
+### 🔔 Webhook Notification System
+**Push notification hub with spatial presentation**:
+- **Real-time webhooks**: Built-in HTTP server receives push notifications
+- **Intelligent routing**: Configure how notifications appear based on source, type, priority
+- **Multiple presentation styles**:
+  - **Banner**: Quick temporary notifications
+  - **Ornament**: Detailed floating notifications
+  - **Fixed Widget**: Persistent notifications pinned to walls
+  - **Spatial Object**: Notifications positioned in 3D space (e.g., iMessage over phone)
+  - **Immersive Alert**: Full-screen urgent notifications
+- **Configurable rules**: Route different apps to different display styles
+- **Priority levels**: Low, normal, high, urgent
+- **Interactive actions**: Notifications can include actionable buttons
+- **Auto-dismiss**: Configurable automatic dismissal
+- **Statistics tracking**: Monitor notification patterns
+
+Example use cases:
+- iMessage notifications appear as spatial objects near your phone
+- Email notifications as fixed widgets on the wall
+- Urgent alerts as immersive full-screen notifications
+- Calendar reminders as auto-dismissing banners
+
 ## Project Structure
 
 ```
